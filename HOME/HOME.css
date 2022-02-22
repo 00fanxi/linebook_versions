@@ -1,0 +1,115 @@
+/*전체 레이아웃 관리*/
+
+h1{
+	background:RGB(070,172,161);
+	text-align:center;
+	width:100vw;
+	height:25rem;
+	margin:0;
+	font-size:15rem;
+	color:white;
+}
+
+h2{
+	display:flex;
+	flex-flow:column;
+	align-items:center;
+}
+
+body{
+	margin:0;
+	display:flex;
+	flex-flow:column;
+	align-items:center;
+}
+
+nav{
+	height:3rem;
+	display:flex;
+	width:100%;
+	flex-flow:row-reverse;
+	align-items:center;
+	background:gray;
+	padding-right:3rem;
+	border-top:solid 0.2rem white;
+	border-bottom:solid 0.2rem white;
+}
+
+nav input{
+	height:2rem;
+	margin-right:1rem;
+}
+
+ul{
+	display:flex;
+	flex-flow:row wrap;
+	justify-content:center;
+	width:70%;
+	padding:0;
+}
+
+ul li{
+	font-size:1.3rem;
+	margin:0.5rem;
+	list-style:none;
+}
+
+a{
+	color:black;
+}
+
+/*새 노드 생성 폼*/
+
+.newnodeform{
+	font-size:1rem;
+	display:none;
+	flex-flow:row wrap; 
+	justify-content:center;
+	width:10rem;
+	box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border:0.01rem solid black;
+	border-radius:5%;
+	background:white;
+	z-index:1;
+	position:absolute;
+}
+
+.newnodetext{
+	display:block;
+	background:#f1f1f1;
+	height:2rem;
+	text-align:center;
+	width:8.5rem;
+}
+
+.newnodequit,.newnodesubmit{
+	display:block; 
+	margin-top:1rem;
+	height:2rem;
+	margin-bottom:1rem;
+	background:#04AA6D;
+	border: none;
+  cursor: pointer;
+	color:white;
+	opacity:0.8;
+}
+
+.newnodequit{
+	background-color: red;
+	margin-right:1rem;
+}
+
+
+/*버튼들 관리*/
+
+.createnode{
+	height:3rem;
+	width:3rem;
+	font-weight:900;
+	font-size:2rem;
+	background:black;
+	color:white;
+	border:0.1rem solid black;
+	border-radius:50%;
+	box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

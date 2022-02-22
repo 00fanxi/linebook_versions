@@ -1,0 +1,468 @@
+코딩 애플
+
+part2
+
+(1강)
+
+웹사이트 기능만들기 기본
+
+1.서버로 데이터 전송할 수 있는 UI 만들고
+2.서버에서 원하는대로 정보를 처리해주면 됨
+
+	Database란
+
+데이터를 일정한 형식으로 저장할 수 있게 도와주는 곳. (엑셀)
+
+	Database의 종류
+
+1. 관계형 DB
+
+엑셀처럼 가로 세로 칸이 나눠져있는 DB
+
+ex) MySQL, MariaDB, Oracle, MS SQL Server ...
+
+그냥 맨위에 제목달고 밑에 데이터 집어 넣으면 됨.
+
+but 3차원의 데이터를 잘 못 다룸. (가로 세로 2차원의 한계, 극복하려면 새로운 표를 하나 더 만들어야함.)
+
+특징 : SQL이라는 Qurey Language를 사용. 대량의 데이터를 입출력하고 Query를 줄 때(내가 원하는 데이터만 뽑을 때)
+매우 빠르고 효율적.
+
+
+2. NoSQL 비관계형 DB
+
+JSON형식으로 데이터 저장.
+
+ex) Dynamo, Oracle NoSQL, MongoDB, Redis, Cassandra...
+
+장점 : 아주 쉽고 자유롭게 데이터를 저장 할 수 있음.
+
+관계형의 경우 세로줄 컬럼 이름부터 잘 작성하고 어떤 데이터를 어디다가 넣을지 미리 생각해야함.
+
+but NoSQL은 대충 집어넣어도 나중에 다 사용가능.
+
+
+	MongoDB 무료 호스팅
+
+MongoDB atlas : 512Mb 무료 호스팅 해줌.
+
+create database
+
+무료 shared 선택
+
+create cluster
+
+user의 아이디 비번 생성
+
+network access메뉴에서 IP추가(데이터베이스 접속할 수 있는 IP를 미리 정의해놓는 일종의 보안장치)
+
+allow access form anywhere
+
+database/collection 만들기 진행
+
+cluster는 하나의 호스팅 공간이고
+
+그 안에 데이터베이스를 만들어야 데이터를 저장할 수 있음.
+
+database->browse collection->add my own data
+
+
+	만든 database 접속(connect)하는 법
+
+cluster에서 connect버튼 클릭
+
+-> connect your application
+
+->driver : nodejs , version : current
+
+->코드 (URL) 저장
+
+
+	다시 server.js
+
+mongodb 라이브러리 설치
+
+%npm install mongodb (%npm install mongodb@3.6.4)
+
+설치 후
+
+const MongoClient = require('mongodb').MongoClient;
+MongoClient.connect('atlas에서 준 URL', function(err,client){
+
+})
+
+URL에 <password>에는 내 비밀번호로 바꿔야함.
+
+	다 한 후
+
+connect코드 콜백함수 안에 app.listen 넣어서 listening on 8080 뜨는지 확인.
+
+
+
+(2강 DB에 자료 저장하는 법)
+
+	에러 처리 하는 법
+
+MongoClient.connect('mongodb+srv://00fanxi:wqt0519@cluster0.onkrt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',function(err,client){
+
+	app.listen(8080, function(){
+		console.log('listening on 8080');
+	});
+
+});
+
+function(err,client)의 err 파라미터 : 에러가 발생했을 시 어떤 에러인지 알려주는 파라미터.
+
+따라서
+
+if(err) {return console.log(err)}
+을 콜백함수 안에 넣으면 무슨 에러인지 콘솔창에 출력됨.
+
+*node.js에서는 if문 안에 오는게 return 한줄이라면 중가로{} 생략가능.
+
+if (err) return console.log(err)
+
+
+	DB에 저장하는 공간 생성
+
+collection : database(폴더)안의 파일들의 개념.
+
+	다시 server.js
+
+어떤 database(폴더)에 저장할 것인지를 명시해야됨.
+
+var db;
+
+db = client.db('todoapp');
+
+(todoapp이라는 database(폴더)에 연결할 것이다)
+이제 db라는 변수를 활용해서 database에 접근할 수 있다.
+
+db.collection('post').insetOne();
+
+(db안에있는 post라는 파일에 저장)
+
+.insertOne('저장할 데이터', function(에러, 결과){ });
+
+파라미터1 : 저장할 데이터 (object자료형으로 저장)
+파라미터2 : 저장이 완료됬을 시 실행할 콜백함수.
+
+
+	최종 형태
+var db;
+const MongoClient = require('mongodb').MongoClient;
+MongoClient.connect('mongodb+srv://00fanxi:wqt0519@cluster0.onkrt.mongodb.net/todoapp?retryWrites=true&w=majority',{useUnifiedTopology:true}, function(err,client){
+	//연결되면 할일
+	if (err) return console.log(err)
+
+	db = client.db('todoapp');
+
+	db.collection('post').insertOne( {이름 : 'John', 나이 : 20},function(err,result){
+		console.log('저장완료');
+	});
+
+
+	app.listen(8080, function(){
+		console.log('listening on 8080');
+	});
+});
+
+({useUnifiedTopology:true} 이건 쓰면 좋은거. 워닝메세지를 제거해준다.)
+(var db로 페이지 전체에서 쓸 수 있는 전역 변수를 하나 만들고,
+client.db('todoapp')이라는 함수로 todoapp이라는 db에 접속해주세요라는 명령을 내렸다.)
+
+	server.js다시 실행 후 atlas
+
+_id:ObjectId("61fe89486297dead02d9ccd8)
+이름 : "John"
+나이 : 20
+
+(저장된 데이터를 확인 가능. object안에 데이터들은 자료형에 따라 int인지 string인지 판단된다.)
+
+	_id : ObjectId( )
+
+데이터 저장시 _id를 꼭 적어야함. 안적을시 강제로 부여해줌.
+
+부여하는 방법 저장할 객체 안에 적으면됨.
+
+{_id : 100 ,이름 : 'John', 나이 : 20}
+
+
+
+(3강 : HTML에 DB데이터 꽂아넣는 법1 - EJS)
+
+	db.collection('post').insertOne( {제목 : req.body.title, 날짜 : req.body.date},function(err,result){
+		console.log('저장완료');
+	});
+
+(응답.send( ) 이 부분은 항상 존재해야함. 전송이 성공하든 실패하든 서버에서 뭔가 보내주어야함. 안그럼 브라우저 멈춤.
+메세지를 보내는거 외에도 간단한 응답코드나 리다이렉트(페이지강제이동)를 해주는 코드도 있음)
+
+	DB에 있는 데이터들을 보여주기
+
+// /list로 GET요청으로 접속하면
+// 실제 DB에 저장된 데이터들로 예쁘게 꾸며진 HTML을 보여줌
+
+	EJS 라이브러리
+
+HTML을 조금 더 쓰기 쉽게 도와주는 템플렛 엔진.(전처리 엔진)
+서버 데이터를 HTML에 쉽게 삽입하게 도와주는 HTML 렌더링 엔진.
+
+%npm install ejs
+
+(지금은 --save --dev이런거 칠 필요 없음)
+
+설치 후
+
+	server.js
+
+app.set('view engine','ejs'); --> 뷰 엔진은 ejs를 쓰겠습니다. (이렇게 등록을 해줘야 ejs로 쓴 HTML을 노드가 렌더링을 잘해줌)
+
+이후에는 확장자 명을 HTML 뿐만 아니라 ejs도 쓸 수 있게됨.
+
+ejs와 HTML의 차이 : 기본적으로 똑같음. 단 ejs는 ejs문법으로 서버테이터를 집어넣을 수 있음.
+
+	ejs 파일 안에서 데이터 삽입하는 방식
+
+<%= 서버에서 보낸 데이터의 변수명  %>
+
+ex)<%= user.name %>
+
+EJS를 사용하면 HTML에 자바스크립트 문법을 사용할 수 있음.
+
+<% if (user) { %>
+	<h2><%= user.name %></h2>
+<% } %>
+
+(HTML에 if문을 적용하거나 반복문을 적용하고 싶을 땐, <% %> 내부에 자바스크립트 문법을 담으면 됨.
+위 코드는 user라는 변수가 참일 때만 내부 <h2> 코드를 보여준다.)
+
+ejs의 대체품 : vue, react, angular
+
+	서버에서 .ejs파일 보내주는 법
+
+app.get('/list',function(req,res){
+	res.render('list.ejs'); --> .ejs를 rendering 해줌.
+});
+
+
+	Error: Failed to lookup view "list.ejs" in views directory
+
+ejs 파일들은 항상 views라는 폴더 안에 들어가있어야 함.
+
+views라는 폴더는 실행창 경로의 마지막 폴더 바로 아래 들어가있어야 함.
+
+
+(4강 : HTML에 DB데이터 꽂아넣는 법2 - DB데이터 읽기)
+
+
+	DB에 저장된 post라는 collection안의 (id가 뭐인 or 모든 or 제목이 뭐인)데이터를 꺼내주세요.
+
+db.collection('post').find();
+db.collectino('post').findOne();
+
+find( ) : DB의 post 파일에 저장된 모든 데이터를 가져온다.
+하지만 이렇게 가져오면 데이터에 포함된 메타 데이터들도 다 같이 딸려옴.
+
+따라서,
+db.collection('post').find().toArray();
+라고 치면 데이터들만 가져옴.
+
+db.collection('post').find().toArray(function(err, result){
+	console.log(result);
+});
+
+toArray()메소드 안에 콜백함수. 에러와 결과.
+(결과 출력)
+
+	ejs안에 DB에서 가져온 데이터 삽입
+
+	db.collection('post').find().toArray(function(err, result){
+		console.log(result);
+		res.render('list.ejs',{ posts : result });
+	});
+
+1.DB에서 데이터 찾아주세요
+2.찾은걸 ejs파일에 삽입.
+(res.render('list.ejs',{ posts : result }); : render()메소드, 파라미터1 = 파일 이름. 파라미터2 = 해당 파일에 넣을 데이터[보통 객체 형식으로 넣음])
+posts는 삽입한 객체안의 데이터의 속성이름.
+*render메소드는 반드시 데이터를 불러온 콜백함수 안에서 사용해야한다.(그래야 그 데이터를 렌더링한 파일에 넣을 수 있음)
+
+	.ejs 파일
+
+<%= posts %>
+
+	posts는 Array 자료형 (toArray 때문)
+
+posts 안에는 객체형식으로 저장된 데이터들이 들어있다.(find()메소드만 썼을 경우에는 객체형식)
+
+따라서, result[0] 또는 posts[0]이라고 하면 배열안의 첫번째 객체 데이터를 전송한다.
+
+result[0].제목 또는 posts[0].제목 이라고 하면 배열안의 첫번째 객체 데이터 안에 '제목'이라는 데이터명을 가진 데이터를 전송한다.
+
+<%= posts[0].제목 %>
+<%= posts[0].날짜 %>
+
+요런 식으로.
+
+	반복문 사용해서 하드코딩에서 벗어나기(EJS 문법)
+
+	서버에서 가져온 할일 리스트
+	<% for(var i =0;i<posts.length;i++){ %>
+		<h4>할일 제목 : <%= posts[i].제목 %></h4>
+		<p>할일 마감날짜 : <%= posts[i].날짜 %></p>
+	<% } %>
+
+posts.length : post collection에 있는 객체 데이터들의 개수.
+
+
+(5강 데이터베이스의 종류와 특징)
+네이버 메모
+
+(6강 게시물마다 번호달기)
+
+	auto increment(항목 추가 할때마다 자동으로 1씩 증가시켜서 저장하는 거)
+
+MongoDB는 그런거 없음.
+
+__id를 직접 부여해주어야함.
+
+그러면, '현재 총게시물개수' + 1 이렇게 부여해주면 될까?
+
+---- 좋은 방법 아님. 예를 들어 1, 2, 3, 4 이렇게 부여해주다가 중간에 2를 삭제하고 새로 데이터를 추가하면 추가전 총개수는 3이 되므로 id가 4인 데이터가 두개가 됨(id가 이미 존재할 경우 저장 자체가 안되는거 확인)
+
+따라서 영구적인 번호를 부여하는게 좋은 관습.
+
+*질문 : 그렇다면 저장할때 이미 존재하는 id를 쭉 보다가 비어있는 id중 가장 작은 수부터 부여하면 안될까?
+*질문 : 그렇게 영구적으로 부여하다보면 데이터베이스의 데이터들의 아이디값은 영구적으로 증가만 하는데 감당가능?
+
+	저장된 데이터 개수를 기록하는 collection을 따로 만들자 04:11
+		(발행된 총 게시물 갯수를 기록하는 저장 공간)
+
+mongodb atlas에 todoapp 밑에 counter라는 콜렉션을 만들고, 
+
+그 안에 {totalPost : 0, name : "게시물갯수"} 라는 다큐먼트를 만든다.
+
+
+	/add로 post요청이 왔을시 총게시물 수에 따른 id부여하기
+
+app.post('/add',function(req,res){
+	res.send('전송완료');
+	db.collection('counter').findOne({name : '게시물갯수',function(err,result){
+		console.log(result.totalPost);
+	});
+	db.collection('post').insertOne( {_id : 총게시물갯수 + 1, 제목 : req.body.title, 날짜 : req.body.date }, function(err,result){
+		console.log('저장완료');
+	});
+});
+
+----> findOne({name : '게시물갯수'},function(err,result){ 
+	console.log(result.totalPost);
+}) 
+
+해당 콜렉션에서 name : '게시물갯수'인 데이터를 찾아주세요.(query문)
+가져온 데이터(객체)의 totalPost의 값을 출력.
+
+
+
+app.post('/add',function(req,res){
+	res.send('전송완료');
+	db.collection('counter').findOne({name : '게시물갯수'},function(err,result){
+		console.log(result.totalPost);
+		var 총게시물갯수 = result.totalPost;
+	});
+	db.collection('post').insertOne( {_id : 총게시물갯수 +1 ,제목 : req.body.title, 날짜 : req.body.date},function(err,result){
+		console.log('저장완료');
+	});
+});
+
+
+	JS에서 변수 만들 때 var, let, const차이
+
+var : 재선언 O, 재할당 O, 생존범위는 function
+
+let : 재선언 X, 재할당 O, 생존범위는 { }
+
+const : 재선언 X, 재할당 X, 생존범위는 { }
+
+
+따라서 위의 코드에서 '총게시물갯수'라는 변수의 생존범위는 
+
+function(err,result){
+		console.log(result.totalPost);
+		var 총게시물갯수 = result.totalPost;
+	});
+
+요안.
+
+따라서 위 코드는 
+
+app.post('/add',function(req,res){
+	db.collection('counter').findOne({name : '게시물갯수'},function(err,result){
+		var 총게시물갯수 = result.totalPost;
+		
+		db.collection('post').insertOne( {_id : 총게시물갯수 +1 ,제목 : req.body.title, 날짜 : req.body.date},function(err,result){
+			console.log('저장완료');
+			res.send('전송완료');
+		});
+	});
+});
+
+요런 식으로 바꿔줘야 총게시물갯수라는 변수를 살릴 수 있다,
+
+해석 : /add로 post 요청하면(폼전송하면)
+
+ DB에서 counter라는 이름의 콜렉션을 찾아서 게시물갯수라는 이름의 데이터를 가져오고 
+
+데이터 중에서 totalPost라는 속성의 값을 총게시물갯수라는 이름의 변수에 할당한 다음,
+
+새로운 데이터의 _id : 총게시물갯수 +1 해서 post 콜렉션에 저장.
+
+성공했다고 res.send로 브라우저에게 글자를 보낸다. (res.render, res.redirect 이런 것도 이용가능)
+
+
+	+ counter라는 콜렉션에 있는 totalPost라는 항목도 1 증가시켜야함.
+
+
+(7강)
+
+	
+	updateOne과 updateMany
+
+
+db.collection('counter').updateOne({ }.{ },function( ){ })
+
+updateOne( )에는 세가지 파라미터가 들어갈 수 있다. (뒤에 있는 function은 안써도됨)
+
+첫번째 파라미터 : 어떤 데이터를 수정할지
+
+두번째 파라미터 : 어떻게 수정할 것인지.
+
+
+.updateOne({name : '게시물갯수'},{totalPost : 1},function(){})
+
+-->name이 게시물 갯수인 데이터의 totalPost 값을 1로 수정하라.
+
+* 데이터를 수정할 때는 반드시 operator를 써야한다.
+
+{ ?? : {totalPost : 1}}
+
+??이 operatot임
+
+ex) $set(변경), $inc(증가), $min(기존값보다 적을 때만 변경), $rename(key값 이름변경)
+
+{ $set : {totalPost : 바꿀 값} }
+
+--> totalPost를 아예 이 값으로 바꿔라.
+
+
+
+
+
+
+
+
+
+
+
+

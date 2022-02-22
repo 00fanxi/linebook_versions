@@ -1,0 +1,112 @@
+.CDF_E1 .portsinport{
+  display:flex;
+  flex-flow:row;
+  height:8.8rem;
+}
+
+.CDF_E1 .portsinport_on{
+  display:flex;
+  flex-flow:column-reverse nowrap;
+}
+
+.CDF_E1{
+	margin-top:1rem;
+	margin-bottom:6.2rem;
+	margin-right:2rem;
+	display:flex;
+	flex-flow:column;
+  height:18.1rem;
+}
+
+.CDF_E1 .num{
+  border:solid black 0.1rem;
+  width :1.1rem;
+  margin:0;
+  padding:0;
+  height:2rem;
+  text-align:center;
+  font-size:0.7rem;
+  font-weight:700;
+}
+
+.CDF_E1 .nodetitle,.CDF_E1 .porttitle{
+	text-align:center;
+	width:13rem;
+}
+
+.CDF_E1 .h{
+	border:solid black 0.1rem;
+	text-align:center;
+	background:gray;
+	color:white;
+}
+
+.CDF_E1 .port{
+	width:1.71rem;
+  font-size:0.85rem;
+}
+.CDF_E1 .use{
+	width:7.69109rem;
+}
+.CDF_E1 .refer{
+	width:3rem
+}
+
+.CDF_E1_row{
+  display:flex;
+  flex-flow:row;
+}
+
+.CDF_E1_32row{
+  display:flex;
+  flex-flow:column-reverse wrap;
+  align-content:flex-start;
+  height:8.8rem;
+  width:10.4rem;
+}
+
+.CDF_E1_32row_on{
+  display:flex;
+  flex-flow:column-reverse wrap;
+  align-content:flex-start;
+  height:8.8rem;
+  width:98.08rem;
+  margin-bottom:0.5rem;
+}
+
+.CDF_E1 .usage{
+	width:7.65rem;
+  height:1.95rem;
+	text-align:center;
+  padding:0;
+}
+
+.CDF_E1 .ref{
+  padding:0;
+	width:2.9rem;
+  height:1.95rem;
+	text-align:center;
+}
+
+.CDF_E1 .label,.display{
+	border:solid black 0.1rem;
+	text-align:center;
+}
+
+.CDF_E1 .display{
+	width:2.1rem;
+}
+
+.CDF_E1 .ing{
+	width:4rem;
+	background:green;
+}
+
+.CDF_E1 .disable{
+	width:4rem;
+	background:red;
+}
+.CDF_E1 .bridge{
+	width:4rem;
+	background:orange;
+}

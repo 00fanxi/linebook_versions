@@ -1,0 +1,487 @@
+coding apple
+
+part 1
+
+(1강)
+
+	서버란?
+
+요청을 받으면 요청한 내용을 보내주는 프로그램
+
+	요청이란?
+
+HTTP 요청 : C(post)R(get)U(put)D(delete)
+
+	
+(2강)
+
+	Node.js란?
+
+JavaScript 런타임 (= 실행창, 실행환경)
+
+	JavaScript란?
+
+HTML을 조작하기 위한 언어
+
+	JavaScript의 해석?
+
+브라우저 : V8, SpiderMonkey, Chakra
+
+	V8엔진을 뗴어서 출시
+
+===Node.js (크롬의 JS 해석 엔진으로 이루어짐)
+JavaScript를 브라우저 내에서 말고도 다른 환경에서도 실행할 수 있게 해줌.
+
+	Node.js 로 서버를 만드는 이유?
+
+Non-blocking I/O 때문.
+
+
+
+(3강)
+
+
+	Node.js 의 특징?
+
+Event-driven, Non-blocking I/O
+
+	일반 서버와의 차이?
+
+빨리 처리할 수 있는 요청들을 먼저 처리.
+서버가 중간에 요청받는 것을 멈추지 않음.
+(SNS,채팅 서버에 유용)
+
+	서버 스케일링?
+
+서버에 인스턴스를 더 만들어서 (접수 창구를 늘림)
+
+린스타트업 : 프로토타입을 먼저 만들어서 장사를 해볼 때 유용.
+만들기도 빠르고, Pivoting할때 변경이 쉽기 때문.
+
+웹서비스에 강점이 있고 나머지는 좀 아님....
+
+
+(4강)
+
+	node설치 후
+
+%node -v (버전 확인)
+
+%node (엔터를 누르면 이게 바로 설치한 자바스크립트 실행창(런타임)임)
+var name = '김';
+console.log('안녕'); 등등...
+
+	vscode 설치 후
+
+작업폴더를 오픈하고 코딩 시작
+
+	express(서버를 쉽게 만들게 해주는 라이브러리)설치
+
+%npm init
+(npm : 라이브러리 설치를 도와주는 도구.)
+(init : 설치한 라이브러리를 저장하기 위한 package.json을 자동 생성
+엔트리 포인트 만 내가 원하는 파일명(server.js)로 만들면 됨) 
+
+%npm install express
+(express라이브러리 설치)
+
+라이브러리를 설치하는 순간 node_modules라는 폴더 생성.
+express만 설치한다고 그것만 설치되는 것이 아니라 관련된 라이브러리들을 다 같이 설치해줌.
+
+	npm으로 설치 안될시 
+
+yarn 설치후 
+
+%yarn add express
+(npm보다 빠르고 안정적임)
+
+
+
+(5강)
+
+
+	server.js
+
+const express = require('express'); --> 설치한 라이브러리를 첨부해주세요
+const app = express();                --> 첨부한 라이브러리를 이용해서 새로운 객체를 만들어주세요.
+
+app.listen();		        --> 컴퓨터에 서버를 열기.
+
+
+(서버를 띄우기 위한 기본 셋팅(express라이브러리))
+
+
+app.listen(8080, function(){ });
+
+(listen(파라미터1,파라미터2)
+
+파라미터1 : 서버띄울 포트 번호;
+파라미터2 : 띄운 후 실행할 코드;
+
+
+	포트란?
+
+6만개의 컴퓨터에 있는 외부랑 네트워크 통신을 하기 위한 구멍.
+(8080포트로 들어오는 사람들한테는 이 작업을 해주세요.)
+
+
+app.listen(8080, function(){
+	console.log('listening on 8080');
+});
+
+(8080포트로 들어오는 사람들한테 'listening on 8080'을 출력해주세요)
+
+
+	localhost:8080
+
+본인 컴퓨터에 8080포트로 들어가는 법.
+
+
+	get요청
+
+URL에 떄려박는 요청
+
+	
+app.get('경로',function(요청,응답){
+    응답.send('펫용품을 쇼핑할 수 있는 페이지입니다.');
+});
+
+(요청과 응답은 한글 그대로 적어도 작동하고, req와 res로 바꿔도 됨)
+
+app.get('/pet',function(req,res){
+	res.send('펫용품을 쇼핑할 수 있는 페이지입니다.')
+});
+
+(/pet의 경로로 들어오는 사람한테 해당 문구를 보여주세여)
+
+
+(6강)
+
+	nodemon(자바스크립트 라이브러리 : 서버 재실행을 자동화)
+
+%npm install -g nodemon (%yarn add global nodemon)
+
+-g : 컴퓨터의 모든 폴더에서 이용할 수 있게 설치해 주세요.
+
+
+%nodemon server.js 
+
+--->보안 오류시, 관리자 권한으로 powershell 실행 후
+%executionpolicy
+
+-- Restricted (문제있음)
+
+%set-executionpolicy unrestricted
+
+-- y입력
+
+(해결)
+
+	/ 는 기타경로 없는 홈페이지
+
+app.get('/',function(req,res){
+	res.sendFile(__dirname + '/index.html')
+});
+
+(.sendFile(보낼파일경로))	
+(__dirname : 현재파일의 경로)
+(server.js와 같은 경로에 있는 /index.html 파일을 보내줌)
+
+
+
+(7강)
+
+	HTML/CSS 라이브러리를 이용해 쉽게 만들기
+
+bootstrap 설치; get started; starter template 예제 코드 복붙(bootstrap에 필요한 js,css설치됨);
+이 후에 필요한 UI의 예제코드를 복붙하면 UI 정상작동;
+
+v5는 IE지원X
+v4는 IE11+
+v3은 IE9+
+
+	부트스트랩이란?
+
+프론트엔드 컴포넌트 라이브러리.(트위터 선임 개발자들이 개발)
+
+원하는 UI 검색 후 예제코드 복붙하면 UI개발 끝.
+
+button, navbar,jumbotron,
+
+	부트스트랩을 npm으로 직접 설치도 가능.
+
+
+(8강)
+
+	.get( ) 함수에 들어가는 파라미터 중 하나가 function( ){ } (함수 안에 함수 = 콜백함수) 임
+
+	콜백함수?
+
+함수 안에 들어가는 함수.
+순차적으로 실행하고 싶을 때 사용.
+
+Ex)
+app.get('/beauty',function(req,res){
+	res.send('뷰티용품 쇼핑 페이지임')
+});
+
+누군가 /beauty로 접속하면 ( 그 이후에) 해당 메시지를 보내주세요 (이미 순차성이 들어감)
+
+
+	.get('경로', function(요청내용, 응답할 방법){ })
+
+app.get('/',function(req,res){
+	res.sendFile(__dirname + '/index.html')
+});
+
+  	res.(방법) : sendFile(파일을 보내고), send(메시지를 보낸다)
+
+
+	JavaScript ES6문법 (최신 자바스크립트 문법)
+
+.get('경로',(요청내용, 응답할 방법)=>{ })
+
+(function 대신에 =>사용)
+보통 ES6라고 부르는 자바스크립트 신 문법인데, 콜백함수를 만들 때 약간 더 코드가 간단해질 수 있어서 선호됩니다. 
+
+그냥 function이라고 쓰는 것과 차이는 딱 하나입니다.
+
+함수 내부에서 this라는 키워드의 값이 바뀐다는 특징이 있는데 보통 상황에선 전혀 신경쓸 필요없으니 자유롭게 사용하도록 합시다. 
+
+
+	
+	<form action="/add" method="POST">
+
+method : get요청 / post요청
+
+(/add 경로로 post요청함)
+
+요청할 때 form에 넣고 전송한 정보는 콜백함수의 req 파라미터에 저장되있음.
+
+이 정보를 쉽게 꺼내쓰려면 body-parser이라는 라이브러리가 필요.
+
+%npm install body-parser (%yarn add body-parser)
+
+(업데이트사항) 2021년 이후로 설치한 프로젝트들은 body-parser 라이브러리가 express에 기본 포함이라 
+
+따로 npm으로 설치할 필요가 없습니다. 
+
+app.use(express.urlencoded({extended: true})) 
+
+▲ 이 코드만 위쪽에 추가해주시면 됩니다. 
+
+
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended : true}));
+
+(body-parser 라이브러리 사용법)
+
+
+	body-parser는 요청 데이터(body) 해석을 쉽게 도와줌.
+
+
+
+	POST 요청으로 서버에 데이터 전송하고 싶으면
+
+1.body-parser 라이브러리 필요.
+
+2.form 데이터의 경우 input들에 name쓰기 (어떤 데이터가 어떤 input에 들어있던건지 구분하기 위함)
+
+
+app.post('/add',function(req,res){
+	res.send('전송완료');
+	console.log(req.body.title);
+});
+
+
+body라는 객체에 모든 input 데이터들이 담겨있음.
+
+
+	요청된 데이터를 영구 저장
+
+app.post('/add',function(req,res){
+	res.send('전송완료');
+	console.log(req.body.title);
+	//DB에 저장해주세요.
+});
+
+
+
+(9강)
+
+	REST API
+
+서버를 만들때 REST API에 의거해서 만들면 예쁜 서버가 됨. (API를 RESTful 하게 만들어야 된다)
+
+	API
+
+Application Programming Interface
+
+프로그램 간에 어떤식으로 통신할 수 있는지에 관한 규약. (API 규약에 따라 데이터 전달)
+
+	웹개발시 API란
+
+웹서버와 클라이언트간의 소통방법(요청방식)
+
+어떻게 서버랑 통신 할 수 있는지 정리해놓은 문서 혹은 통신 규약
+
+내 서버랑 통신할 수 있는 방법 = API
+(예 : /write로 들어올시 글을 쓸 수 있는 페이지를 보내준다.) => 이것 또한 내서버가 고객과 통신하는 방법
+
+따라서, 이런 API들을 어떤 식으로 만들어야 좋은 API일까에 대한 답이 바로 REST API임.
+
+
+
+
+	REST API
+
+옛날에는 API에 일관성 없이 막 만들었음.
+
+서버랑 통신하려고 해도 어려움을 많이 느낌 ( URL이 어려움 등등)
+
+Roy Fielding(2000)이란 사람이 주장하길(졸업논문)
+
+HTTP 요청 시스템 (get,post,put,delete)을 잘 활용해서 
+
+REST(Representational State Transfer)원칙에 의거해서 쓰면 인터넷 세상이 평화로워짐. 
+
+=> 이게 지금의 정론이 됨.
+
+
+	REST 원칙 6개 (잘지키면 RESTful하다고 함)
+
+1.Uniform interface
+
+API나 URL을 작성할 때 간결하고 형식이 일관적이며 예측이 가능해야한다.
+
+-하나의 자료는 하나의 URL로 (하나를 가져오기 위한 두개의 URL을 만들지 말자)
+-URL 하나를 알면 둘을 알 수 있어야함 (간결하고 예측 가능해야함)
+-URL 이름짓기 관습을 잘 따라주세요.
+-요청과 응답은 정보가 충분히 들어있어야 함
+
+	URL과 URI의 차이
+
+URI는 자료를 넘버링하고 분류하고 지칭하는 방법. URL과 비슷하지만 조금 더 큰 의미. 도서관에서
+책 분류할 때 URI에 의해서 분류하기도 함.
+
+2.Client-Server 역할을 정확히 구분
+
+브라우저에게 서버의 역할을 시키면 안됨. (브라우저한테 서버의 DB에 접근해서 뭔가를 가져와라X)
+
+-브라우저는 요청만 할 뿐
+-서버는 응답만 할 뿐
+
+3.Stateless
+
+각각의 요청은 서로 독립적인 존재로 다뤄야함.
+
+-요청1과 요청2는 의존성이 없어야함 
+(요청1이 성공한 결과를 가지고 요청2를 처리해준다 X)
+
+=> 요청 하나 만으로 자료를 가져오기 충분하도록 요청에 필요한 모든 정보들을 실어 보내자.
+
+4.Cacheable
+
+요청을 통해 보내는 자료들은 캐싱이 가능해야한다.
+그리고 캐싱가능하다고 표시하거나 캐싱 기간을 설정해주어야 한다.
+웹페이지 구성 요소들 (HTML이나 이미지 파일 등은 캐싱이 가능해야 한다.)
+
+-서버에서 보내주는 정보들은 캐싱이 가능해야함
+-캐싱을 위한 버전 같은 것도 관리 잘해야함
+(실은 브라우저(크롬)이 알아서 잘해줌)
+
+	캐싱이란?
+
+자동으로 자주 사용하는 이미지 파일, CSS 파일 등을 하드에 저장해놓고
+해당 서버를 방문할 때 따로 서버에게 그 파일들을 요청하지 않고 하드에서 불러오는 것.
+
+5.Layered System
+
+요청처리하는 곳. DB에 저장하는 곳 이런 여러가지 단계를 거쳐서 요청을 처리해도 된다.
+
+= 여러개의 레이어를 거쳐서 요청을 처리하게 만들어도 된다.
+
+6.Code on Demand
+
+서버는 고객에게 실제 실행가능한 코드를 전송해줄 수도 있다.
+
+(5,6은 별로 중요하지 않음 나중에 찾아봐라)
+
+
+
+
+	좋은 REST API 이름 짓기 원칙
+
+-URL을 명사로 작성 (동사는 HTTP에서 사용중)
+
+-하위문서를 나타낼 땐 /
+
+-파일 확장자(.html) 쓰지 말기
+
+-띄어쓰기는 대시(-) 이용
+
+-자료 하나당 하나의 URL
+
+
+	URL 이름짓기 관습
+-단어들을 동사보다는 명사 위주로 구성
+
+- 응용해서 다른 정보들을 쉽게 가져올 수 있을 정도로 일관성 있음
+
+-대충봐도 어떤 정보가 뜰어올지 예측이 가능함
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
